@@ -1,0 +1,11 @@
+.DS_Store
+.svn
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+js
+node_modules
+tests/chocolatechip
+tests/qunit
+dist
