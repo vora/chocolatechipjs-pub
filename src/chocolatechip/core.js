@@ -111,6 +111,10 @@
       return Object.prototype.toString.call(obj) === '[object Object]';
     },
     
+    isEmptyObject : function (obj) {
+        return Object.keys(obj).length === 0;
+    },
+    
     isNumber : function ( number ) {
       return typeof number === 'number';
     },
