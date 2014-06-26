@@ -10,7 +10,7 @@
 ChocolateChip.js
 Copyright 2014 Sourcebits www.sourcebits.com
 License: MIT
-Version: 3.6.0
+Version: 3.6.1
 */
 (function() {
   'use strict';
@@ -130,7 +130,7 @@ Version: 3.6.0
 
   $.extend({
  
-    version : "3.6.0",
+    version : "3.6.1",
     
     libraryName : 'ChocolateChip',
     
@@ -237,6 +237,10 @@ Version: 3.6.0
     
     isObject : function ( obj ) {
       return Object.prototype.toString.call(obj) === '[object Object]';
+    },
+    
+    isEmptyObject : function (obj) {
+        return Object.keys(obj).length === 0;
     },
     
     isNumber : function ( number ) {
