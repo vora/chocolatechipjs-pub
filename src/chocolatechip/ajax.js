@@ -150,7 +150,6 @@
       var fn = 'fn_' + $.uuidNum(),
       script = document.createElement('script'),
       head = $('head')[0];
-      console.log(fn);
       script.setAttribute('id', fn);
       var startTimeout = new Date();
       window[fn] = function(data) {
