@@ -371,7 +371,7 @@ test('$.when should resolve when all deferreds resolve.', function() {
    deferreds2[0].resolve(1, 2);
    deferreds2[1].resolve(3, 4);
    deferreds2[2].resolve(5, 6);
-   //equal(promise2.state(), 'resolved', 'Should be resolved.');
+   equal(promise2.state(), 'resolved', 'Should be resolved.');
 });
 
 // 23 
