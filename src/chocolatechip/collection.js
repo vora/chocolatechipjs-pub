@@ -978,7 +978,7 @@
     
     on : function ( event, selector, callback, capturePhase ) {
       if (!this.length) return [];
-      // If and object literal of events:functions are passed,
+      // If an object literal of events:functions are passed,
       // map them to event listeners on the element:
       if (! selector && /Object/img.test(event.constructor.toString())) {
         this.each(function(ctx) {

@@ -74,10 +74,12 @@ gulp.task('js', function () {
     "src/chocolatechip/string.js",
     "src/chocolatechip/form.js", 
     "src/chocolatechip/ajax.js",
+    "src/chocolatechip/xhr.js",
     "src/chocolatechip/feature-detection.js",
     "src/chocolatechip/templates.js",
     "src/chocolatechip/pubsub.js",
     "src/chocolatechip/deferred.js",
+    "src/chocolatechip/promises.js",
     "src/chocolatechip/expose-chocolatechip.js"
   ])
 
