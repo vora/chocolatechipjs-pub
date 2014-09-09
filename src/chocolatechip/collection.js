@@ -306,7 +306,8 @@
     
     after : function ( args ) {
       if (!this.length) return [];
-      var __after = function ( node, content ) {
+      var length = this.length;
+      var __after = function ( node, content, length ) {
         var parent = node.parentNode;
         if (typeof content === 'string') {
           content = $.make(content);
@@ -314,21 +315,17 @@
         if (content && content.constructor === Array) {
           var i = 0, len = content.length;
           while (i < len) {
-            if (node === parent.lastChild) {
-              parent.appendChild(content[i]);
-            } else {
-              parent.insertBefore(content[i], node.nextSibling);
-            }
+            node.insertAdjacentElement('afterEnd', content[i]);
             i++;
           }
         } else if (content && content.nodeType === 1) {
-          parent.appendChild(content);
+          node.insertAdjacentElement('afterEnd',content);
         }
         return this;
       };    
     
       this.each(function(node) {
-        __after(node, args);
+        __after(node, args, length);
       });
       return this;
     },
@@ -749,25 +746,42 @@
       });
     },
     
-    prev : function ( ) {
+    prev : function ( selector ) {
       if (!this.length) return [];
       var ret = [];
-      this.each(function(node) {
-        if (node.previousElementSibling) {
-          ret.push(node.previousElementSibling);
-        }
-      });
+      if (selector && (typeof selector === 'string')) {
+        this.each(function(node) {
+          if (node.previousElementSibling && node.previousElementSibling.nodeName === selector) {
+            ret.push(node.previousElementSibling);
+          }
+        });
+      } else {
+        this.each(function(node) {
+          if (node.previousElementSibling) {
+            ret.push(node.previousElementSibling);
+          }
+        });
+        
+      }
       return ret;
     },
     
-    next : function ( ) {
+    next : function ( selector ) {
       if (!this.length) return [];
       var ret = [];
-      this.each(function(node) {
-        if (node.nextElementSibling) {
-          ret.push(node.nextElementSibling);
-        }
-      });
+      if (selector && (typeof selector === 'string')) {
+        this.each(function(node) {
+          if (node.nextElementSibling && node.nextElementSibling.nodeName === selector) {
+            ret.push(node.nextElementSibling);
+          }
+        });
+      } else {
+        this.each(function(node) {
+          if (node.nextElementSibling) {
+            ret.push(node.nextElementSibling);
+          }
+        });
+      }
       return ret;
     },
      
