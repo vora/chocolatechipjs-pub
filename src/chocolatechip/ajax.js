@@ -42,8 +42,9 @@
       var url = settings.url;
       var async = settings.async || false;
       var context = settings.context || deferred;
+      var params;
       if (typeof settings.data === 'object') {
-        var params = [];
+        params = [];
         for (var prop in settings.data) {
           if (settings.data.hasOwnProperty(prop)) {
             params.push(encodeURIComponent(prop)+'='+encodeURIComponent(settings.data[prop]));
@@ -54,7 +55,7 @@
         params = settings.data || null;
       }
       if (type !== 'POST') {
-        if (url.indexOf('?') == -1) {
+        if (url.indexOf('?') === -1) {
           url += '?'+params;
         } else {
           url += '&'+params;
@@ -64,9 +65,9 @@
       xhr.timeout = settings.timeout ? settings.timeout : 0;
       xhr.open(type, url, async);
       if (!!settings.headers) {  
-        for (var prop in settings.headers) { 
-          if (settings.headers.hasOwnProperty(prop)) {
-            xhr.setRequestHeader(prop, settings.headers[prop]);
+        for (var property in settings.headers) { 
+          if (settings.headers.hasOwnProperty(property)) {
+            xhr.setRequestHeader(property, settings.headers[property]);
           }
         }
       }
