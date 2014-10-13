@@ -2,7 +2,7 @@
   "name": "chocolatechipjs",
   "title": "ChocolateChip.js",
   "description": "JavaScript library for mobile Web apps",
-  "version": "3.7.0",
+  "version": "3.8.0",
   "homepage": "http://chocolatechip-ui.com",
   "author": {
     "name": "Sourcebits Inc. and other contributors"
@@ -17,7 +17,7 @@
       "url": "https://github.com/sourcebitsllc/chocolatechip-ui/blob/master/MIT-LICENSE.txt"
     }
   ],
-  "devDependencies": {    "gulp": "~3.6.2",
+  "devDependencies": {    "gulp": "~3.8.8",
     "gulp-less": "1.1.10",
     "gulp-concat": "~2.1.7",
     "gulp-rename": "~0.2.1",
