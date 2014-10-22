@@ -306,8 +306,7 @@
     
     after : function ( args ) {
       if (!this.length) return [];
-      var length = this.length;
-      var __after = function ( node, content, length ) {
+      var __after = function ( node, content ) {
         var parent = node.parentNode;
         if (typeof content === 'string') {
           content = $.make(content);
@@ -315,17 +314,21 @@
         if (content && content.constructor === Array) {
           var i = 0, len = content.length;
           while (i < len) {
-            node.insertAdjacentElement('afterEnd', content[i]);
+            if (node === parent.lastChild) {
+              parent.appendChild(content[i]);
+            } else {
+              parent.insertBefore(content[i], node.nextSibling);
+            }
             i++;
           }
         } else if (content && content.nodeType === 1) {
-          node.insertAdjacentElement('afterEnd',content);
+          parent.appendChild(content);
         }
         return this;
       };    
     
       this.each(function(node) {
-        __after(node, args, length);
+        __after(node, args);
       });
       return this;
     },
@@ -746,42 +749,25 @@
       });
     },
     
-    prev : function ( selector ) {
+    prev : function ( ) {
       if (!this.length) return [];
       var ret = [];
-      if (selector && (typeof selector === 'string')) {
-        this.each(function(node) {
-          if (node.previousElementSibling && node.previousElementSibling.nodeName === selector) {
-            ret.push(node.previousElementSibling);
-          }
-        });
-      } else {
-        this.each(function(node) {
-          if (node.previousElementSibling) {
-            ret.push(node.previousElementSibling);
-          }
-        });
-        
-      }
+      this.each(function(node) {
+        if (node.previousElementSibling) {
+          ret.push(node.previousElementSibling);
+        }
+      });
       return ret;
     },
     
-    next : function ( selector ) {
+    next : function ( ) {
       if (!this.length) return [];
       var ret = [];
-      if (selector && (typeof selector === 'string')) {
-        this.each(function(node) {
-          if (node.nextElementSibling && node.nextElementSibling.nodeName === selector) {
-            ret.push(node.nextElementSibling);
-          }
-        });
-      } else {
-        this.each(function(node) {
-          if (node.nextElementSibling) {
-            ret.push(node.nextElementSibling);
-          }
-        });
-      }
+      this.each(function(node) {
+        if (node.nextElementSibling) {
+          ret.push(node.nextElementSibling);
+        }
+      });
       return ret;
     },
      
@@ -924,119 +910,6 @@
       return ret.length ? ret.unique() : this;
     },
     
-    bind : function( event, callback, capturePhase ) {
-      if (!this.length) return [];
-      capturePhase = capturePhase || false;
-      this.each(function(ctx) {
-        $.chch_cache.events.set(ctx, event, callback, capturePhase);
-      });
-      return this;
-    },
-      
-    unbind : function( event, callback, capturePhase ) {
-      if (!this.length) return [];
-      var id;
-      this.each(function(ctx) {
-        if (!ctx.id || !$.chch_cache.events.hasKey(ctx.id)) {
-          return this;
-        }
-        capturePhase = capturePhase || false;
-        id = ctx.getAttribute('id');
-        $.chch_cache.events._delete(id, event, callback, capturePhase);
-      });
-      return this;
-    },
-     
-    trigger : function ( event ) {
-      if (!this.length) return [];
-      this.each(function(ctx) {
-        if( document.createEvent ) {
-          var evtObj = document.createEvent('Events');
-          evtObj.initEvent(event, true, false);
-          ctx.dispatchEvent(evtObj);
-        }
-      });
-    },
-     
-    delegate : function ( selector, event, callback, capturePhase ) {
-      if (!this.length) return [];
-      capturePhase = capturePhase || false;
-      this.each(function(ctx) {
-        ctx.addEventListener(event, function(e) {
-          var target = e.target;
-          if (e.target.nodeType === 3) {
-            target = e.target.parentNode;
-          }
-          $(selector, ctx).each(function(element) {
-            if (element === target) {
-              callback.call(element, e);
-            } else {
-              try {
-                var ancestor = $(target).ancestor(selector);
-                if (element === ancestor[0]) {
-                  callback.call(element, e);
-                }
-              } catch(err) {}
-            }
-          });
-        }, capturePhase);
-      });
-    },
-    
-    undelegate : function ( selector, event, callback, capturePhase ) {
-      if (!this.length) return [];
-      this.each(function(ctx) {
-        $(ctx).unbind(event, callback, capturePhase);
-      });
-    },
-    
-    on : function ( event, selector, callback, capturePhase ) {
-      if (!this.length) return [];
-      // If and object literal of events:functions are passed,
-      // map them to event listeners on the element:
-      if (! selector && /Object/img.test(event.constructor.toString())) {
-        this.each(function(ctx) {
-          for (var key  in event) {
-            if (event.hasOwnProperty(key)) {
-              $(ctx).on(key, event[key]);
-            }
-          }
-        });
-      }
-      var ret = [];
-      // Check to see if event is a spaced separated list:
-      var events;
-      if (typeof event === 'string') {
-        event = event.trim();
-        if (/\s/.test(event)) {
-          events = event.split(' ');
-          if (events.length) {
-            this.each(function(ctx) {
-              events.each(function(evt) {
-                if (typeof selector === 'function') {
-                  $(ctx).bind(evt, selector, callback);
-                  ret.push(ctx);
-                } else {
-                  $(ctx).delegate(selector, evt, callback, capturePhase);
-                  ret.push(ctx);
-                }                
-              });
-            });
-          }
-        }
-      }
-      this.each(function(ctx) {
-        if (typeof selector === 'function') {
-          $(ctx).bind(event, selector, callback);
-          ret.push(ctx);
-        } else {
-          $(ctx).delegate(selector, event, callback, capturePhase);
-          ret.push(ctx);
-        }
-      });
-      return ret.length ? ret : this;
-    },
-    
     off : function( event, selector, callback, capturePhase ) {
       if (!this.length) return [];
       var ret = [];
@@ -1051,98 +924,7 @@
       });
       return ret.length ? ret : this;
     },
-    
-    animate : function ( options ) {
-      if (!this.length) return [];  
-      var onEnd = null;
-      var duration = duration || '.5s';
-      var easing = easing || 'linear';
-      var css = {};
-      var transition;
-      var transitionEnd;
-      if ('ontransitionend' in window) {
-        transition = 'transition';
-        transitionEnd = 'transitionend';
-      } else {
-        transition = '-webkit-transition';
-        transitionEnd = 'webkitTransitionEnd';
-      }
-      css[transition] = 'all ' + duration + ' ' + easing;
-      this.forEach(function(ctx) {
-        for (var prop in options) {
-          if (prop === 'onEnd') {
-            onEnd = options[prop];
-            $(ctx).bind(transitionEnd, onEnd());
-          } else {
-            css[prop] = options[prop];
-          }
-        }
-        $(ctx).css(css);
-      });
-      return this;
-    },
-        
-    // This only operates on the first element in the collection.
-    data : function( key, value ) {
-      if (!this.length) return [];
-      var id;
-      var ret;
-      var ctx = this[0];
-      id = ctx.id;
-      if (key === 'undefined' || key === null) {
-        return;
-      }
-      if (value || value === 0) {
-        var val = value;
-        if (!ctx.id) {
-          ++$.uuid;
-          id = $.makeUuid();
-          ctx.setAttribute("id", id);
-          $.chch_cache.data[id] = {};
-          $.chch_cache.data[id][key] = val;
-        } else {
-          id = ctx.id;
-          if (!$.chch_cache.data[id]) {
-            $.chch_cache.data[id] = {};
-            $.chch_cache.data[id][key] = val;
-          } else {
-            $.chch_cache.data[id][key] = val;
-          }
-        }
-      } else {
-        if (key && id) {
-          if (!$.chch_cache.data[id]) return;
-          if ($.chch_cache.data[id][key] === 0) return $.chch_cache.data[id][key];
-          if (!$.chch_cache.data[id][key]) return;
-          return $.chch_cache.data[id][key];
-        }
-      }
-     return this;
-    },
-    
-    removeData : function ( key ) {
-      if (!this.length) return [];
-      this.each(function(ctx) {
-        var id = ctx.getAttribute('id');
-        if (!id) {
-          return;
-        }
-        if (!$.chch_cache.data[ctx.id]) {
-          return this;
-        }
-        if (!key) {
-          delete $.chch_cache.data[id];
-          return this;
-        }
-        if (Object.keys($.chch_cache.data[id]).length === 0) {
-          delete $.chch_cache.data[id];
-        } else {
-          delete $.chch_cache.data[id][key];
-        }
-        return this;
-      });
-    },
-    
+           
     clone : function ( value ) {
       if (!this.length) return [];
       var ret = [];
@@ -1203,13 +985,6 @@
         ret.push(ctx);
       });
       return returnResult(ret);
-    },
-    
-    ready : function ( callback ) {
-      if (!this.length) return [];
-      $.ready(function() {
-        return callback.call(callback);
-      });
     }
   });
 })();

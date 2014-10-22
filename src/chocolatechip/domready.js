@@ -26,4 +26,12 @@
       }
     }
   });
+  $.fn.extend({  
+    ready : function ( callback ) {
+      if (!this.length) return [];
+      $.ready(function() {
+        return callback.call(callback);
+      });
+    }
+  });
 })();

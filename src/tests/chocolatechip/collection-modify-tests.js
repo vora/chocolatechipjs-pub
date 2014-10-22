@@ -526,30 +526,5 @@ test('[].empty:', function() {
    ul.empty();
    equal(ul.children().length, 0, 'Should have no children.');
 });
-//37
-test('[].ready:', function() {
-   var list = $('#ul');
-   equal([].ready().length, 0, 'Should have length of 0.');
-   equal($.isArray([].ready()), true, 'Should return an array.');
-   var readyResult;
-   equal(readyResult, undefined , 'readyResult should be undefined.');
-   list.ready(function() {
-      readyResult = true;
-   });
-   stop();
-   setTimeout(function() {
-      equal(readyResult, true, 'readyResult should be true.');
-      start();
-   }, 100);
-   var readyResult2;
-   $(document).ready(function() {
-      readyResult2 = true;
-   })
-   stop();
-   setTimeout(function() {
-      equal(readyResult2, true, 'readyResult2 should be true.');
-      start();
-   }, 100);
-});
 
 
