@@ -10,7 +10,7 @@
 ChocolateChip.js
 Copyright 2014 Sourcebits www.sourcebits.com
 License: MIT
-Version: 3.7.0
+Version: 3.8.0
 */
 (function() {
   'use strict';
@@ -130,7 +130,7 @@ Version: 3.7.0
 
   $.extend({
  
-    version : "3.7.0",
+    version : "3.8.0",
     
     libraryName : 'ChocolateChip',
     
@@ -672,8 +672,7 @@ Version: 3.7.0
     
     after : function ( args ) {
       if (!this.length) return [];
-      var length = this.length;
-      var __after = function ( node, content, length ) {
+      var __after = function ( node, content ) {
         var parent = node.parentNode;
         if (typeof content === 'string') {
           content = $.make(content);
@@ -681,17 +680,21 @@ Version: 3.7.0
         if (content && content.constructor === Array) {
           var i = 0, len = content.length;
           while (i < len) {
-            node.insertAdjacentElement('afterEnd', content[i]);
+            if (node === parent.lastChild) {
+              parent.appendChild(content[i]);
+            } else {
+              parent.insertBefore(content[i], node.nextSibling);
+            }
             i++;
           }
         } else if (content && content.nodeType === 1) {
-          node.insertAdjacentElement('afterEnd',content);
+          parent.appendChild(content);
         }
         return this;
       };    
     
       this.each(function(node) {
-        __after(node, args, length);
+        __after(node, args);
       });
       return this;
     },
@@ -1112,42 +1115,25 @@ Version: 3.7.0
       });
     },
     
-    prev : function ( selector ) {
+    prev : function ( ) {
       if (!this.length) return [];
       var ret = [];
-      if (selector && (typeof selector === 'string')) {
-        this.each(function(node) {
-          if (node.previousElementSibling && node.previousElementSibling.nodeName === selector) {
-            ret.push(node.previousElementSibling);
-          }
-        });
-      } else {
-        this.each(function(node) {
-          if (node.previousElementSibling) {
-            ret.push(node.previousElementSibling);
-          }
-        });
-        
-      }
+      this.each(function(node) {
+        if (node.previousElementSibling) {
+          ret.push(node.previousElementSibling);
+        }
+      });
       return ret;
     },
     
-    next : function ( selector ) {
+    next : function ( ) {
       if (!this.length) return [];
       var ret = [];
-      if (selector && (typeof selector === 'string')) {
-        this.each(function(node) {
-          if (node.nextElementSibling && node.nextElementSibling.nodeName === selector) {
-            ret.push(node.nextElementSibling);
-          }
-        });
-      } else {
-        this.each(function(node) {
-          if (node.nextElementSibling) {
-            ret.push(node.nextElementSibling);
-          }
-        });
-      }
+      this.each(function(node) {
+        if (node.nextElementSibling) {
+          ret.push(node.nextElementSibling);
+        }
+      });
       return ret;
     },
      
@@ -1290,119 +1276,6 @@ Version: 3.7.0
       return ret.length ? ret.unique() : this;
     },
     
-    bind : function( event, callback, capturePhase ) {
-      if (!this.length) return [];
-      capturePhase = capturePhase || false;
-      this.each(function(ctx) {
-        $.chch_cache.events.set(ctx, event, callback, capturePhase);
-      });
-      return this;
-    },
-      
-    unbind : function( event, callback, capturePhase ) {
-      if (!this.length) return [];
-      var id;
-      this.each(function(ctx) {
-        if (!ctx.id || !$.chch_cache.events.hasKey(ctx.id)) {
-          return this;
-        }
-        capturePhase = capturePhase || false;
-        id = ctx.getAttribute('id');
-        $.chch_cache.events._delete(id, event, callback, capturePhase);
-      });
-      return this;
-    },
-     
-    trigger : function ( event ) {
-      if (!this.length) return [];
-      this.each(function(ctx) {
-        if( document.createEvent ) {
-          var evtObj = document.createEvent('Events');
-          evtObj.initEvent(event, true, false);
-          ctx.dispatchEvent(evtObj);
-        }
-      });
-    },
-     
-    delegate : function ( selector, event, callback, capturePhase ) {
-      if (!this.length) return [];
-      capturePhase = capturePhase || false;
-      this.each(function(ctx) {
-        ctx.addEventListener(event, function(e) {
-          var target = e.target;
-          if (e.target.nodeType === 3) {
-            target = e.target.parentNode;
-          }
-          $(selector, ctx).each(function(element) {
-            if (element === target) {
-              callback.call(element, e);
-            } else {
-              try {
-                var ancestor = $(target).ancestor(selector);
-                if (element === ancestor[0]) {
-                  callback.call(element, e);
-                }
-              } catch(err) {}
-            }
-          });
-        }, capturePhase);
-      });
-    },
-    
-    undelegate : function ( selector, event, callback, capturePhase ) {
-      if (!this.length) return [];
-      this.each(function(ctx) {
-        $(ctx).unbind(event, callback, capturePhase);
-      });
-    },
-    
-    on : function ( event, selector, callback, capturePhase ) {
-      if (!this.length) return [];
-      // If and object literal of events:functions are passed,
-      // map them to event listeners on the element:
-      if (! selector && /Object/img.test(event.constructor.toString())) {
-        this.each(function(ctx) {
-          for (var key  in event) {
-            if (event.hasOwnProperty(key)) {
-              $(ctx).on(key, event[key]);
-            }
-          }
-        });
-      }
-      var ret = [];
-      // Check to see if event is a spaced separated list:
-      var events;
-      if (typeof event === 'string') {
-        event = event.trim();
-        if (/\s/.test(event)) {
-          events = event.split(' ');
-          if (events.length) {
-            this.each(function(ctx) {
-              events.each(function(evt) {
-                if (typeof selector === 'function') {
-                  $(ctx).bind(evt, selector, callback);
-                  ret.push(ctx);
-                } else {
-                  $(ctx).delegate(selector, evt, callback, capturePhase);
-                  ret.push(ctx);
-                }                
-              });
-            });
-          }
-        }
-      }
-      this.each(function(ctx) {
-        if (typeof selector === 'function') {
-          $(ctx).bind(event, selector, callback);
-          ret.push(ctx);
-        } else {
-          $(ctx).delegate(selector, event, callback, capturePhase);
-          ret.push(ctx);
-        }
-      });
-      return ret.length ? ret : this;
-    },
-    
     off : function( event, selector, callback, capturePhase ) {
       if (!this.length) return [];
       var ret = [];
@@ -1417,98 +1290,7 @@ Version: 3.7.0
       });
       return ret.length ? ret : this;
     },
-    
-    animate : function ( options ) {
-      if (!this.length) return [];  
-      var onEnd = null;
-      var duration = duration || '.5s';
-      var easing = easing || 'linear';
-      var css = {};
-      var transition;
-      var transitionEnd;
-      if ('ontransitionend' in window) {
-        transition = 'transition';
-        transitionEnd = 'transitionend';
-      } else {
-        transition = '-webkit-transition';
-        transitionEnd = 'webkitTransitionEnd';
-      }
-      css[transition] = 'all ' + duration + ' ' + easing;
-      this.forEach(function(ctx) {
-        for (var prop in options) {
-          if (prop === 'onEnd') {
-            onEnd = options[prop];
-            $(ctx).bind(transitionEnd, onEnd());
-          } else {
-            css[prop] = options[prop];
-          }
-        }
-        $(ctx).css(css);
-      });
-      return this;
-    },
-        
-    // This only operates on the first element in the collection.
-    data : function( key, value ) {
-      if (!this.length) return [];
-      var id;
-      var ret;
-      var ctx = this[0];
-      id = ctx.id;
-      if (key === 'undefined' || key === null) {
-        return;
-      }
-      if (value || value === 0) {
-        var val = value;
-        if (!ctx.id) {
-          ++$.uuid;
-          id = $.makeUuid();
-          ctx.setAttribute("id", id);
-          $.chch_cache.data[id] = {};
-          $.chch_cache.data[id][key] = val;
-        } else {
-          id = ctx.id;
-          if (!$.chch_cache.data[id]) {
-            $.chch_cache.data[id] = {};
-            $.chch_cache.data[id][key] = val;
-          } else {
-            $.chch_cache.data[id][key] = val;
-          }
-        }
-      } else {
-        if (key && id) {
-          if (!$.chch_cache.data[id]) return;
-          if ($.chch_cache.data[id][key] === 0) return $.chch_cache.data[id][key];
-          if (!$.chch_cache.data[id][key]) return;
-          return $.chch_cache.data[id][key];
-        }
-      }
-     return this;
-    },
-    
-    removeData : function ( key ) {
-      if (!this.length) return [];
-      this.each(function(ctx) {
-        var id = ctx.getAttribute('id');
-        if (!id) {
-          return;
-        }
-        if (!$.chch_cache.data[ctx.id]) {
-          return this;
-        }
-        if (!key) {
-          delete $.chch_cache.data[id];
-          return this;
-        }
-        if (Object.keys($.chch_cache.data[id]).length === 0) {
-          delete $.chch_cache.data[id];
-        } else {
-          delete $.chch_cache.data[id][key];
-        }
-        return this;
-      });
-    },
-    
+           
     clone : function ( value ) {
       if (!this.length) return [];
       var ret = [];
@@ -1569,13 +1351,6 @@ Version: 3.7.0
         ret.push(ctx);
       });
       return returnResult(ret);
-    },
-    
-    ready : function ( callback ) {
-      if (!this.length) return [];
-      $.ready(function() {
-        return callback.call(callback);
-      });
     }
   });
 
@@ -1604,6 +1379,14 @@ Version: 3.7.0
     
        $.DOMReadyList.push(callback);
       }
+    }
+  });
+  $.fn.extend({  
+    ready : function ( callback ) {
+      if (!this.length) return [];
+      $.ready(function() {
+        return callback.call(callback);
+      });
     }
   });
 
@@ -1791,35 +1574,16 @@ Version: 3.7.0
       var xhr = new XMLHttpRequest();
       var deferred = new $.Deferred();
       var type = settings.type || 'GET';
-      var url = settings.url;
-      var async = settings.async || false;
-      var context = settings.context || deferred;
-      var params;
-      if (typeof settings.data === 'object') {
-        params = [];
-        for (var prop in settings.data) {
-          if (settings.data.hasOwnProperty(prop)) {
-            params.push(encodeURIComponent(prop)+'='+encodeURIComponent(settings.data[prop]));
-          }
-        }
-        params = params.join('&');
-      } else {
-        params = settings.data || null;
-      }
-      if (type !== 'POST') {
-        if (url.indexOf('?') === -1) {
-          url += '?'+params;
-        } else {
-          url += '&'+params;
-        }
-      }
+      var async  = settings.async || false;      
+      var params = settings.data || null;
+      var context = options.context || deferred;
       xhr.queryString = params;
       xhr.timeout = settings.timeout ? settings.timeout : 0;
-      xhr.open(type, url, async);
+      xhr.open(type, settings.url, async);
       if (!!settings.headers) {  
-        for (var property in settings.headers) { 
-          if (settings.headers.hasOwnProperty(property)) {
-            xhr.setRequestHeader(property, settings.headers[property]);
+        for (var prop in settings.headers) { 
+          if(settings.headers.hasOwnProperty(prop)) { 
+            xhr.setRequestHeader(prop, settings.headers[prop]);
           }
         }
       }
@@ -1830,25 +1594,31 @@ Version: 3.7.0
 
       var handleResponse = function() {
         if (xhr.status === 0 && xhr.readyState === 4 || xhr.status >= 200 && xhr.status < 300 && xhr.readyState === 4 || xhr.status === 304 && xhr.readyState === 4 ) {
-          if (settings.dataType === 'json') {
+          if (settings.dataType && (settings.dataType === 'json')) {
             xhr.handleResp(JSON.parse(xhr.responseText));
-            deferred.resolve(JSON.parse(xhr.responseText), settings.context, xhr);
+            deferred.resolve(xhr.responseText, settings.context, xhr);
           } else {
             xhr.handleResp(xhr.responseText);
             deferred.resolve(xhr.responseText, settings.context, xhr);
           }
-        } else if (xhr.status >= 400) {
-          settings.error(xhr);
-          deferred.reject(xhr.status, settings.context, xhr);
+        } else if(xhr.status >= 400) {
+          if (!!error) {
+            error(xhr);
+            deferred.reject(xhr.status, settings.context, xhr);
+          }
         }
       };
 
       if (async) {
-        settings.beforeSend(xhr, settings);
+        if (settings.beforeSend !== $.noop) {
+          settings.beforeSend(xhr, settings);
+        }
         xhr.onreadystatechange = handleResponse;
         xhr.send(params);
       } else {
-        settings.beforeSend(xhr, settings);
+        if (settings.beforeSend !== $.noop) {
+          settings.beforeSend(xhr, settings);
+        }
         xhr.send(params);
         handleResponse();
       }
@@ -1868,10 +1638,7 @@ Version: 3.7.0
       }
       if (typeof data === 'function' && !success) {
         return $.ajax({url : url, type: 'GET', success : data});
-      } else if (typeof data === 'string' || typeof data === 'object') {
-        if (typeof success !== 'function') {
-          success = $.noop;
-        }
+      } else if (typeof data === 'string' && typeof success === 'function') {
         return $.ajax({url : url, type: 'GET', data : data, success : success, dataType : dataType});
       }
     },
@@ -1882,15 +1649,12 @@ Version: 3.7.0
         return;
       }
       if (!data) {
-        return $.ajax({url : url, type: 'GET', dataType : 'json'});
+        return;
       }
       if (typeof data === 'function' && !success) {
-        return $.ajax({url : url, type: 'GET', async: true, success : data, dataType : 'json'});
-      } else if (typeof data === 'string' || typeof data === 'object') {
-        if (typeof success !== 'function') {
-          success = $.noop;
-        }
-        return $.ajax({url : url, type: 'GET', async: true, data : data, success : success, dataType : 'json'});
+        $.ajax({url : url, type: 'GET', async: true, success : data, dataType : 'json'});
+      } else if (typeof data === 'string' && typeof success === 'function') {
+        $.ajax({url : url, type: 'GET', data : data, success : success, dataType : 'json'});
       }
     },
 
@@ -1899,7 +1663,7 @@ Version: 3.7.0
       var options = {
         url: 'http:/whatever.com/stuff/here',
         callback: function() {
-          // do stuff here
+           // do stuff here
         },
         callbackType: 'jsonCallback=?',
         timeout: 5000
@@ -1949,19 +1713,16 @@ Version: 3.7.0
       }
       if (typeof data === 'function' && !dataType) {
         if (typeof success === 'string') {
-          dataType = success;
+           dataType = success;
         } else {
           dataType = 'form';
         }
-        return $.ajax({url : url, type: 'POST', success : data, dataType : dataType});
-      } else if (typeof data === 'string' || typeof data === 'object') {
-        if (typeof success !== 'function') {
-          success = $.noop;
-        }
+        $.ajax({url : url, type: 'POST', success : data, dataType : dataType});
+      } else if (typeof data === 'string' && typeof success === 'function') {
         if (!dataType) {
           dataType = 'form';
         }
-        return $.ajax({url : url, type: 'POST', data : data, success : success, dataType : dataType});
+        $.ajax({url : url, type: 'POST', data : data, success : success, dataType : dataType});
       }
     }
   });
