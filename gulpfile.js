@@ -125,7 +125,7 @@ gulp.task('jshint', function() {
 });
 
 // Create Tests:
-gulp.task('tests', function() {
+gulp.task('tests', function(finishedCallback) {
   gulp.src('src/tests/qunit/*')
     .pipe(gulp.dest('tests/qunit'));
 
@@ -136,10 +136,21 @@ gulp.task('tests', function() {
     .pipe(header(testHeader, {pkg: pkg}))
     .pipe(gulp.dest('tests/chocolatechip'));
 
-  gulp.src('tests/chocolatechip/*.html')
-    .on('data', function(file) {
-      qunit(file.path);
+  testCount = 0;
+  testCountStream = gulp.src('tests/chocolatechip/*.html');
+  testCountStream.on('data', function(file) {
+    testCount++;
+  });
+  testCountStream.on('end', function() {
+    testRunStream = gulp.src('tests/chocolatechip/*.html');
+    testRunStream.on('data', function(file) {
+      qunit(file.path, {}, function() {
+        testCount--;
+        if (testCount == 0)
+          finishedCallback();
+      });
     });
+  });
 });
 
 /*
