@@ -11,6 +11,7 @@ var gulp = require('gulp')
 ,   jshint = require('gulp-jshint')
 ,   header = require('gulp-header')
 ,   footer = require('gulp-footer')
+,   qunit = require('node-qunit-phantomjs')
 ,   version = pkg.version;
 
 //Add Trailing slash to projectPath if not exists.
@@ -134,6 +135,11 @@ gulp.task('tests', function() {
   gulp.src('src/tests/chocolatechip/*.html')
     .pipe(header(testHeader, {pkg: pkg}))
     .pipe(gulp.dest('tests/chocolatechip'));
+
+  gulp.src('tests/chocolatechip/*.html')
+    .on('data', function(file) {
+      qunit(file.path);
+    });
 });
 
 /*
