@@ -1,13 +1,15 @@
-ChocolateChipJS
+Shopify fork of ChocolateChipJS
 ================
 
 ##A JavaScript Library for Mobile Web App Development
 
-The purpose of ChocolateChipJS is to use with ChocolateChip-UI. Of course, since it is so small and fast, you could use it as the basis for a simple mobile app, as you would with Zeptojs, etc. Please visit [ChocolateChip-UI's Website](http://chocolatechip-ui.com) for documentation on ChocolateChipJS. You can optionally build the ChocolateChip-UI framework with support for ChocolateChipJS. Please read the build instructions for [ChocolateChip-UI to learn more](http://chocolatechip-ui.com/documentation).
+We are using ChocolateChipJS because it currently appears to be the fastest and smallest JS framework for DOM manipulation and AJAX helpers around. [See jsperf results here](http://jsperf.com/chocolatechip-vs-jquery-vs-zepto/9)
+
+Visit [ChocolateChip-UI's Website](http://chocolatechip-ui.com) for documentation on ChocolateChipJS. 
 
 ##Building 
 
-If you do not want to build the framework from scratch, you can use the pre-compiled version in the dist folder. This is just the framework, minus examples, demos, etc.
+If you do not want to build the framework from scratch, you can use the pre-compiled version in the dist folder. This is just the framework, minus examples, demos, etc. **The dist version may not have the latest changes in master.**
 
 ChocolateChipJS uses Gulpjs to build. This is a Node package, so you'll first need to have [Node installed](http://http://nodejs.org). After installing Nodejs, or if you already have it installed, on Mac OS X use the terminal to cd to the directory. On Windows you can use the Windows command prompt to do this. Once you are in the folder, run the following command in your terminal. 
 
