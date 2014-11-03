@@ -239,7 +239,9 @@ test('[].siblings:', function() {
    equal(item.siblings().length, 2, 'Should return an array with length of 2.');
    equal(elem.siblings().length, 3, 'Should return an array with length of 3.');
    equal(div.siblings().length, 3, 'Should return an array with length of 3.');
+   equal(div.siblings('.whatever').length, 1, 'Should return an array with length of 1.');
    equal(div.siblings('ul').length, 1, 'Should return an array with length of 1.');
    equal(div.siblings('div').length, 1, 'Should return an array with length of 1.');
    equal(item.siblings('[disabled]').length, 1, 'Should return an array with length of 1.');
+   equal(item.siblings('#listitem').length, 1, 'Should return an array with length of 1.');
 });
