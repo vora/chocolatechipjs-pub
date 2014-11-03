@@ -72,8 +72,9 @@ gulp.task('js', function () {
     "src/chocolatechip/collection.js",
     "src/chocolatechip/domready.js",
     "src/chocolatechip/string.js",
-    "src/chocolatechip/form.js", 
+    "src/chocolatechip/form.js",
     "src/chocolatechip/ajax.js",
+    "src/chocolatechip/events.js",
     "src/chocolatechip/feature-detection.js",
     "src/chocolatechip/templates.js",
     "src/chocolatechip/pubsub.js",
@@ -117,7 +118,7 @@ gulp.task('jshint', function() {
       multistr: true,
       scripturl: true,
       "-W030": true,
-      "-W083": false  
+      "-W083": false
     }))
     .pipe(jshint.reporter('default'));
 });
@@ -135,7 +136,7 @@ gulp.task('tests', function() {
     .pipe(gulp.dest('tests/chocolatechip'));
 });
 
-/* 
+/*
    Define default task:
    To build, just enter gulp in terminal.
 */
