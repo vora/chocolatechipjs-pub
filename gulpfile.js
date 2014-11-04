@@ -11,6 +11,7 @@ var gulp = require('gulp')
 ,   jshint = require('gulp-jshint')
 ,   header = require('gulp-header')
 ,   footer = require('gulp-footer')
+,   qunit = require('node-qunit-phantomjs')
 ,   version = pkg.version;
 
 //Add Trailing slash to projectPath if not exists.
@@ -79,6 +80,7 @@ gulp.task('js', function () {
     "src/chocolatechip/templates.js",
     "src/chocolatechip/pubsub.js",
     "src/chocolatechip/deferred.js",
+    "src/chocolatechip/data.js",
     "src/chocolatechip/expose-chocolatechip.js"
   ])
 
@@ -131,13 +133,34 @@ gulp.task('tests', function() {
   gulp.src('src/tests/chocolatechip/*.js')
     .pipe(gulp.dest('tests/chocolatechip'));
 
-  gulp.src('src/tests/chocolatechip/*.html')
+  stream = gulp.src('src/tests/chocolatechip/*.html')
     .pipe(header(testHeader, {pkg: pkg}))
     .pipe(gulp.dest('tests/chocolatechip'));
+
+  return stream;
 });
 
+// Run Tests
+gulp.task('qunit', ['tests'], function(finishedCallback) {
+  testCount = 0;
+  testCountStream = gulp.src('tests/chocolatechip/*.html');
+  testCountStream.on('data', function(file) {
+    testCount++;
+  });
+
+  testCountStream.on('end', function() {
+    testRunStream = gulp.src('tests/chocolatechip/*.html');
+    testRunStream.on('data', function(file) {
+      qunit(file.path, {}, function() {
+        testCount--;
+        if (testCount == 0)
+          finishedCallback();
+      });
+    });
+  });
+});
 /*
    Define default task:
    To build, just enter gulp in terminal.
 */
-gulp.task('default', ['js', 'jshint', 'tests']);
+gulp.task('default', ['js', 'jshint', 'tests', 'qunit']);

@@ -10,9 +10,9 @@ test('[].css:', function() {
    equal(item.css('background-color'), 'rgb(255, 255, 0)', 'Should return rgb(255, 255, 0).');
    equal(item.css('width'), '200px', 'Should return 200px.');
    equal(item.css('height'), '200px', 'Should return 200px.');
-   equal(item.css('padding'), '20px', 'Should return 20px;');
-   equal(item.css('border-color'), 'rgb(0, 128, 0)', 'Should be rgb(0, 128, 0).');
-   equal(item.css('border-radius'), '20px', 'Should be 20px.');
+   equal(item.css('padding-top'), '20px', 'Should return 20px;');
+   equal(item.css('border-top-color'), 'rgb(0, 128, 0)', 'Should be rgb(0, 128, 0).');
+   equal(item.css('border-top-left-radius'), '20px', 'Should be 20px.');
    list.css('width', '300px');
    equal(list.css('width'), '300px', 'Should be 300px.');
    list.css('height', '150px');
