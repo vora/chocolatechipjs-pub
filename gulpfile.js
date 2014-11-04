@@ -126,22 +126,28 @@ gulp.task('jshint', function() {
 });
 
 // Create Tests:
-gulp.task('tests', function(finishedCallback) {
+gulp.task('tests', function() {
   gulp.src('src/tests/qunit/*')
     .pipe(gulp.dest('tests/qunit'));
 
   gulp.src('src/tests/chocolatechip/*.js')
     .pipe(gulp.dest('tests/chocolatechip'));
 
-  gulp.src('src/tests/chocolatechip/*.html')
+  stream = gulp.src('src/tests/chocolatechip/*.html')
     .pipe(header(testHeader, {pkg: pkg}))
     .pipe(gulp.dest('tests/chocolatechip'));
 
+  return stream;
+});
+
+// Run Tests
+gulp.task('qunit', ['tests'], function(finishedCallback) {
   testCount = 0;
   testCountStream = gulp.src('tests/chocolatechip/*.html');
   testCountStream.on('data', function(file) {
     testCount++;
   });
+
   testCountStream.on('end', function() {
     testRunStream = gulp.src('tests/chocolatechip/*.html');
     testRunStream.on('data', function(file) {
@@ -153,9 +159,8 @@ gulp.task('tests', function(finishedCallback) {
     });
   });
 });
-
 /*
    Define default task:
    To build, just enter gulp in terminal.
 */
-gulp.task('default', ['js', 'jshint', 'tests']);
+gulp.task('default', ['js', 'jshint', 'tests', 'qunit']);
