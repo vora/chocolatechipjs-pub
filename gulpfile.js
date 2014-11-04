@@ -80,6 +80,7 @@ gulp.task('js', function () {
     "src/chocolatechip/templates.js",
     "src/chocolatechip/pubsub.js",
     "src/chocolatechip/deferred.js",
+    "src/chocolatechip/data.js",
     "src/chocolatechip/expose-chocolatechip.js"
   ])
 
