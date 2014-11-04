@@ -216,6 +216,9 @@ test('[].ancestor:', function() {
    equal($.isArray([].parent()), true, 'Should return an array.');
    equal($.isArray(item.ancestor()), true, 'Should return an array.');
    equal(item.ancestor().length, 0, 'Should return an empty array.');
+   equal(item.ancestor('.foo').length, 0, 'Should return an empty array for a non-matching class.');
+   equal(item.ancestor('#foo').length, 0, 'Should return an empty array for a non-matching id.');
+   equal(item.ancestor('foo').length, 0, 'Should return an empty array for a non-matching node name.');
    equal($.isArray(item.ancestor('ul')), true, 'Should return an array.');
    equal(item.ancestor('ul')[0].id, 'ul', 'Should return id of ancestor: "ul".');
    equal(item.ancestor('ul')[0].className, 'ul', 'Should return class name of ancestor: "ul".');

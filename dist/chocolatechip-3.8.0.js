@@ -1199,8 +1199,9 @@ Version: 3.8.0
       var el = this[0];
       var position = null;
       var newSelector = null;
+      var possibleAncestor = null;
       var p = el.parentNode;
-      if (!p) {
+      if (!p || p === document) {
         return [];
       }
       if (typeof selector === 'string') {
@@ -1220,26 +1221,26 @@ Version: 3.8.0
          ret.push(p);
       } else if (typeof selector === 'string' && selector.substr(0,1) === '.' ) {
         newSelector = selector.split('.')[1];
-        if (p.nodeName === 'BODY') {
-          ret.push(p);
-        }
         if (p.classList.contains(newSelector)) {
           ret.push(p);
         } else {
-          ret.push($(p).ancestor(selector)[0]);
+          possibleAncestor = $(p).ancestor(selector)[0];
+          if(possibleAncestor) { ret.push(possibleAncestor); }
         }
       } else if (typeof selector === 'string' && selector.substr(0,1) === '#' ) {
         newSelector = selector.split('#')[1];
         if (p.getAttribute('id') === newSelector) {
           ret.push(p);
         } else {
-          ret.push($(p).ancestor(selector)[0]);
+          possibleAncestor = $(p).ancestor(selector)[0];
+          if(possibleAncestor) { ret.push(possibleAncestor); }
         }
       } else {
         if (p.tagName && (p.tagName.toLowerCase() === selector)) {
           ret.push(p);
         } else {
-          ret.push($(p).ancestor(selector)[0]);
+          possibleAncestor = $(p).ancestor(selector)[0];
+          if(possibleAncestor) { ret.push(possibleAncestor); }
         }
       }
       return ret;
