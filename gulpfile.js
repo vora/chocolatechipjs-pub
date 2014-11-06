@@ -53,6 +53,7 @@ var testHeader = [
   "      <link rel='stylesheet' href='../qunit/qunit.css'>",
   "      <script src='../../dist/chocolatechip-<%= pkg.version %>.js'></script>",
   "      <script src='../qunit/qunit.js'></script>",
+  "      <script src='../qunit/sinon.js'></script>",
   "  </head>\n"
 ].join('\n');
 

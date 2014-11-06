@@ -39,15 +39,15 @@
       var xhr = new XMLHttpRequest();
       var deferred = new $.Deferred();
       var type = settings.type || 'GET';
-      var async  = settings.async || false;      
+      var async  = settings.async || false;
       var params = settings.data || null;
       var context = options.context || deferred;
       xhr.queryString = params;
       xhr.timeout = settings.timeout ? settings.timeout : 0;
       xhr.open(type, settings.url, async);
-      if (!!settings.headers) {  
-        for (var prop in settings.headers) { 
-          if(settings.headers.hasOwnProperty(prop)) { 
+      if (!!settings.headers) {
+        for (var prop in settings.headers) {
+          if(settings.headers.hasOwnProperty(prop)) {
             xhr.setRequestHeader(prop, settings.headers[prop]);
           }
         }
@@ -55,7 +55,7 @@
       if (settings.dataType) {
         xhr.setRequestHeader('Content-Type', dataTypes[settings.dataType]);
       }
-      xhr.handleResp = settings.success; 
+      xhr.handleResp = settings.success;
 
       var handleResponse = function() {
         if (xhr.status === 0 && xhr.readyState === 4 || xhr.status >= 200 && xhr.status < 300 && xhr.readyState === 4 || xhr.status === 304 && xhr.readyState === 4 ) {
@@ -89,14 +89,14 @@
       }
       return deferred;
     },
-    
+
     // Parameters: url, data, success, dataType.
     get : function ( url, data, success, dataType ) {
       if (!url) {
         return;
       }
       if (!data) {
-        return $.ajax({url : url, type: 'GET'}); 
+        return $.ajax({url : url, type: 'GET'});
       }
       if (!dataType) {
         dataType = null;
@@ -107,7 +107,7 @@
         return $.ajax({url : url, type: 'GET', data : data, success : success, dataType : dataType});
       }
     },
-    
+
     // Parameters: url, data, success.
     getJSON : function ( url, data, success ) {
       if (!url) {
@@ -167,7 +167,7 @@
       }
       return deferred;
     },
-    
+
     // Parameters: url, data, success, dataType.
     post : function ( url, data, success, dataType ) {
       if (!url) {
@@ -188,6 +188,8 @@
           dataType = 'form';
         }
         $.ajax({url : url, type: 'POST', data : data, success : success, dataType : dataType});
+      } else if (typeof data === "object" && data.constructor === FormData && typeof success === 'function') {
+        $.ajax({url : url, type: 'POST', data : data, success : success, dataType : null});
       }
     }
   });

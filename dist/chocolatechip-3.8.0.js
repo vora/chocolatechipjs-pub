@@ -1423,7 +1423,61 @@ Version: 3.8.0
   });
 
 
-  $.extend($, {  
+  function getFormValues(rootNode) {
+    var result = [];
+    var currentNode = rootNode.firstChild;
+    while (currentNode) {
+      if (currentNode.nodeName.match(/INPUT|SELECT|TEXTAREA/i)) {
+        result.push({ name: currentNode.name, value: getFieldValue(currentNode)});
+      } else {
+        var subresult = getFormValues(currentNode);
+        result = result.concat(subresult);
+      }
+      currentNode = currentNode.nextSibling;
+    }
+    return result;
+  }
+  function getFieldValue(fieldNode) {
+    if (fieldNode.nodeName === 'INPUT') {
+      if (fieldNode.type.toLowerCase() === 'radio' || fieldNode.type.toLowerCase() === 'checkbox') {
+        if (fieldNode.checked) {
+          return fieldNode.value;
+        }
+      } else if (fieldNode.type.toLowerCase() === 'file' && fieldNode.files.length > 0) {
+        return fieldNode.files[0];
+      } else {
+        if (!fieldNode.type.toLowerCase().match(/button|reset|submit|image/i)) {
+          return fieldNode.value;
+        }
+      }
+    } else {
+      if (fieldNode.nodeName === 'TEXTAREA') {
+        return fieldNode.value;
+      } else {
+        if (fieldNode.nodeName === 'SELECT') {
+          return getSelectedOptionValue(fieldNode);
+        }
+      }
+    }
+    return '';
+  }
+  function getSelectedOptionValue(selectNode) {
+    var multiple = selectNode.multiple;
+    if (!multiple) {
+      return selectNode.value;
+    }
+    if (selectNode.selectedIndex > -1) {
+      var result = [];
+      $('option', selectNode).each(function(item) {
+        if (item.selected) {
+          result.push(item.value);
+        }
+      });
+      return result;
+    }
+  }
+
+  $.extend($, {
     // Convert form values into JSON object:
     form2JSON : function(rootNode, delimiter) {
       rootNode = typeof rootNode === 'string' ? $(rootNode)[0] : rootNode;
@@ -1431,58 +1485,7 @@ Version: 3.8.0
       var formValues = getFormValues(rootNode);
       var result = {};
       var arrays = {};
-      
-      function getFormValues(rootNode) {
-        var result = [];
-        var currentNode = rootNode.firstChild;
-        while (currentNode) {
-          if (currentNode.nodeName.match(/INPUT|SELECT|TEXTAREA/i)) {
-            result.push({ name: currentNode.name, value: getFieldValue(currentNode)});
-          } else {
-            var subresult = getFormValues(currentNode);
-            result = result.concat(subresult);
-          }
-          currentNode = currentNode.nextSibling;
-        }
-        return result;
-      }
-      function getFieldValue(fieldNode) {
-        if (fieldNode.nodeName === 'INPUT') {
-          if (fieldNode.type.toLowerCase() === 'radio' || fieldNode.type.toLowerCase() === 'checkbox') {
-            if (fieldNode.checked) {
-              return fieldNode.value;
-            }
-          } else {
-            if (!fieldNode.type.toLowerCase().match(/button|reset|submit|image/i)) {
-              return fieldNode.value;
-            }
-          }
-        } else {
-          if (fieldNode.nodeName === 'TEXTAREA') {
-            return fieldNode.value;
-          } else {
-            if (fieldNode.nodeName === 'SELECT') {
-              return getSelectedOptionValue(fieldNode);
-            }
-          }
-        }
-        return '';
-      }
-      function getSelectedOptionValue(selectNode) {
-        var multiple = selectNode.multiple;
-        if (!multiple) {
-          return selectNode.value;
-        }
-        if (selectNode.selectedIndex > -1) {
-          var result = [];
-          $('option', selectNode).each(function(item) {
-            if (item.selected) {
-              result.push(item.value);
-            }
-          });
-          return result;
-        }
-      }   
+
       formValues.each(function(item) {
         var value = item.value;
         if (value !== '') {
@@ -1513,13 +1516,13 @@ Version: 3.8.0
                 } else {
                   if (!arrays[arrName][arrIdx]) {
                     currResult[arrName].push({});
-                    arrays[arrName][arrIdx] = 
+                    arrays[arrName][arrIdx] =
                     currResult[arrName][currResult[arrName].length - 1];
                   }
                 }
                 currResult = arrays[arrName][arrIdx];
               } else {
-                if (j < nameParts.length - 1) { 
+                if (j < nameParts.length - 1) {
                   if (!currResult[namePart]) {
                     currResult[namePart] = {};
                   }
@@ -1533,8 +1536,21 @@ Version: 3.8.0
         }
       });
       return result;
+    },
+    // Convert form values into a FormData object:
+    form2FormData : function(rootNode) {
+      rootNode = typeof rootNode === 'string' ? $(rootNode)[0] : rootNode;
+      var formData = new FormData();
+      var formValues = getFormValues(rootNode);
+
+      formValues.each(function(item) {
+        if (item.value !== '')
+          formData.append(item.name, item.value);
+      });
+      return formData;
     }
   });
+
 
 
   $.extend($, {
@@ -1576,15 +1592,15 @@ Version: 3.8.0
       var xhr = new XMLHttpRequest();
       var deferred = new $.Deferred();
       var type = settings.type || 'GET';
-      var async  = settings.async || false;      
+      var async  = settings.async || false;
       var params = settings.data || null;
       var context = options.context || deferred;
       xhr.queryString = params;
       xhr.timeout = settings.timeout ? settings.timeout : 0;
       xhr.open(type, settings.url, async);
-      if (!!settings.headers) {  
-        for (var prop in settings.headers) { 
-          if(settings.headers.hasOwnProperty(prop)) { 
+      if (!!settings.headers) {
+        for (var prop in settings.headers) {
+          if(settings.headers.hasOwnProperty(prop)) {
             xhr.setRequestHeader(prop, settings.headers[prop]);
           }
         }
@@ -1592,7 +1608,7 @@ Version: 3.8.0
       if (settings.dataType) {
         xhr.setRequestHeader('Content-Type', dataTypes[settings.dataType]);
       }
-      xhr.handleResp = settings.success; 
+      xhr.handleResp = settings.success;
 
       var handleResponse = function() {
         if (xhr.status === 0 && xhr.readyState === 4 || xhr.status >= 200 && xhr.status < 300 && xhr.readyState === 4 || xhr.status === 304 && xhr.readyState === 4 ) {
@@ -1626,14 +1642,14 @@ Version: 3.8.0
       }
       return deferred;
     },
-    
+
     // Parameters: url, data, success, dataType.
     get : function ( url, data, success, dataType ) {
       if (!url) {
         return;
       }
       if (!data) {
-        return $.ajax({url : url, type: 'GET'}); 
+        return $.ajax({url : url, type: 'GET'});
       }
       if (!dataType) {
         dataType = null;
@@ -1644,7 +1660,7 @@ Version: 3.8.0
         return $.ajax({url : url, type: 'GET', data : data, success : success, dataType : dataType});
       }
     },
-    
+
     // Parameters: url, data, success.
     getJSON : function ( url, data, success ) {
       if (!url) {
@@ -1704,7 +1720,7 @@ Version: 3.8.0
       }
       return deferred;
     },
-    
+
     // Parameters: url, data, success, dataType.
     post : function ( url, data, success, dataType ) {
       if (!url) {
@@ -1725,6 +1741,8 @@ Version: 3.8.0
           dataType = 'form';
         }
         $.ajax({url : url, type: 'POST', data : data, success : success, dataType : dataType});
+      } else if (typeof data === "object" && data.constructor === FormData && typeof success === 'function') {
+        $.ajax({url : url, type: 'POST', data : data, success : success, dataType : null});
       }
     }
   });
