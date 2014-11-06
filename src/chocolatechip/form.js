@@ -1,6 +1,6 @@
 (function(){
   "use strict";
-  $.extend($, {  
+  $.extend($, {
     // Convert form values into JSON object:
     form2JSON : function(rootNode, delimiter) {
       rootNode = typeof rootNode === 'string' ? $(rootNode)[0] : rootNode;
@@ -8,7 +8,7 @@
       var formValues = getFormValues(rootNode);
       var result = {};
       var arrays = {};
-      
+
       function getFormValues(rootNode) {
         var result = [];
         var currentNode = rootNode.firstChild;
@@ -59,7 +59,7 @@
           });
           return result;
         }
-      }   
+      }
       formValues.each(function(item) {
         var value = item.value;
         if (value !== '') {
@@ -90,13 +90,13 @@
                 } else {
                   if (!arrays[arrName][arrIdx]) {
                     currResult[arrName].push({});
-                    arrays[arrName][arrIdx] = 
+                    arrays[arrName][arrIdx] =
                     currResult[arrName][currResult[arrName].length - 1];
                   }
                 }
                 currResult = arrays[arrName][arrIdx];
               } else {
-                if (j < nameParts.length - 1) { 
+                if (j < nameParts.length - 1) {
                   if (!currResult[namePart]) {
                     currResult[namePart] = {};
                   }
