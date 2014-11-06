@@ -100,7 +100,7 @@ gulp.task('js', function () {
 
 
 // JSHint:
-gulp.task('jshint', function() {
+gulp.task('jshint', ['js'], function() {
   gulp.src("dist/chocolatechip-" + pkg.version + ".js")
     // jshint and options:
     .pipe(jshint({
@@ -126,7 +126,7 @@ gulp.task('jshint', function() {
 });
 
 // Create Tests:
-gulp.task('tests', function() {
+gulp.task('tests', ['jshint'], function() {
   gulp.src('src/tests/qunit/*')
     .pipe(gulp.dest('tests/qunit'));
 
