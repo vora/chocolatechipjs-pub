@@ -12,6 +12,7 @@ var gulp = require('gulp')
 ,   header = require('gulp-header')
 ,   footer = require('gulp-footer')
 ,   qunit = require('node-qunit-phantomjs')
+,   fs = require('fs')
 ,   version = pkg.version;
 
 //Add Trailing slash to projectPath if not exists.
@@ -125,8 +126,24 @@ gulp.task('jshint', ['js'], function() {
     .pipe(jshint.reporter('default'));
 });
 
+// Clean Tests:
+gulp.task('clean', function() {
+  if( fs.existsSync('tests/chocolatechip') ) {
+    fs.readdirSync('tests/chocolatechip').forEach(function(file, index) {
+      var currentPath = 'tests/chocolatechip/' + file;
+        if(fs.statSync(currentPath).isDirectory()) {
+          deleteFolderRecursive(currentPath);
+        } else {
+          fs.unlinkSync(currentPath, function (err) {
+            if (err) throw err;
+          });
+        }
+    });
+  }
+});
+
 // Create Tests:
-gulp.task('tests', ['jshint'], function() {
+gulp.task('tests', ['jshint', 'clean'], function() {
   gulp.src('src/tests/qunit/*')
     .pipe(gulp.dest('tests/qunit'));
 
@@ -163,4 +180,4 @@ gulp.task('qunit', ['tests'], function(finishedCallback) {
    Define default task:
    To build, just enter gulp in terminal.
 */
-gulp.task('default', ['js', 'jshint', 'tests', 'qunit']);
+gulp.task('default', ['clean', 'js', 'jshint', 'tests', 'qunit']);
