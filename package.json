@@ -1,20 +1,20 @@
 {
-  "name": "chocolatechipjs",
-  "title": "ChocolateChip.js",
+  "name": "chocolatechipjs-shopify",
+  "title": "ChocolateChip.js for Shopify",
   "description": "JavaScript library for mobile Web apps",
-  "version": "3.8.0",
+  "version": "3.8.1",
   "homepage": "http://chocolatechip-ui.com",
   "author": {
-    "name": "Sourcebits Inc. and other contributors"
+    "name": "Sourcebits Inc., Shopify Inc., and other contributors"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/sourcebit-robertbiggs/chocolatechipjs.git"
+    "url": "https://github.com/Shopify/chocolatechipjs-pub.git"
   },
   "licences": [
     {
       "type": "MIT",
-      "url": "https://github.com/sourcebitsllc/chocolatechip-ui/blob/master/MIT-LICENSE.txt"
+      "url": "https://github.com/Shopify/chocolatechipjs-pub/blob/master/LICENSE"
     }
   ],
   "scripts": {

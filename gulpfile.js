@@ -51,7 +51,7 @@ var testHeader = [
   "      <meta http-equiv='content-type' content='text/html; charset=utf-8'>",
   "      <title>QUnit ChocolateChipJS</title>",
   "      <link rel='stylesheet' href='../qunit/qunit.css'>",
-  "      <script src='../../dist/chocolatechip-<%= pkg.version %>.js'></script>",
+  "      <script src='../../dist/chocolatechip-shopify.js'></script>",
   "      <script src='../qunit/qunit.js'></script>",
   "      <script src='../qunit/sinon.js'></script>",
   "  </head>\n"
@@ -88,7 +88,7 @@ gulp.task('js', function () {
 
     .pipe(replace(/^\(function\(\)\{\n  \"use strict\";/img, ''))
     .pipe(replace(/^\}\)\(\);/img, ''))
-    .pipe(concat("chocolatechip-" + pkg.version + ".js"))
+    .pipe(concat("chocolatechip-shopify.js"))
     .pipe(header(chuijs_start))
     .pipe(footer(chuijs_end))
     .pipe(header(chocolatechipjsHeader, { pkg : pkg, chuiName: pkg.title }))
@@ -96,7 +96,7 @@ gulp.task('js', function () {
     .pipe(gulp.dest(pkg.projectPath + './dist/'))
     .pipe(uglify())
     .pipe(header(chocolatechipjsHeaderMin, { pkg : pkg, chuiName: pkg.title }))
-    .pipe(rename("chocolatechip-" + pkg.version + ".min.js"))
+    .pipe(rename("chocolatechip-shopify.min.js"))
     .pipe(gulp.dest(pkg.projectPath + './dist/'))
 });
 
