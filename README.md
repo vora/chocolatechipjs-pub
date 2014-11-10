@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Shopify/chocolatechipjs-pub.svg?branch=master)](https://travis-ci.org/Shopify/chocolatechipjs-pub)
+
 Shopify fork of ChocolateChipJS
 ================
 
