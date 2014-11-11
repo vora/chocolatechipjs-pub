@@ -1605,10 +1605,10 @@ Version: 3.8.1
             deferred.resolve(xhr.responseText, settings.context, xhr);
           }
         } else if(xhr.status >= 400) {
-          if (!!error) {
-            error(xhr);
-            deferred.reject(xhr.status, settings.context, xhr);
+          if (typeof settings.error == "function") {
+            settings.error(xhr);
           }
+          deferred.reject(xhr.status, settings.context, xhr);
         }
       };
 

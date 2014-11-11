@@ -22,3 +22,21 @@ test('$.post works with FormData', function() {
   ok(request, 'Should create request');
   equal(request.requestBody, formData, 'Should set requestBody');
 });
+
+// 2
+test('$.ajax handles errors', function() {
+  var request = null;
+  xhr.onCreate = function(xhr) {
+    request = xhr;
+  };
+
+  var errorHandlerCalled = false;
+  var promiseFailed = false;
+  var op = $.ajax({url: 'http://www.google.com', error: function() {errorHandlerCalled = true}});
+  op.fail(function() {promiseFailed = true});
+  request.respond(400, {}, "Error");
+  request.onreadystatechange();
+
+  ok(errorHandlerCalled, 'Should call error handler');
+  ok(promiseFailed, 'Should fail promise');
+});
