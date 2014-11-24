@@ -216,6 +216,9 @@ test('[].ancestor:', function() {
    equal($.isArray([].parent()), true, 'Should return an array.');
    equal($.isArray(item.ancestor()), true, 'Should return an array.');
    equal(item.ancestor().length, 0, 'Should return an empty array.');
+   equal(item.ancestor('.foo').length, 0, 'Should return an empty array for a non-matching class.');
+   equal(item.ancestor('#foo').length, 0, 'Should return an empty array for a non-matching id.');
+   equal(item.ancestor('foo').length, 0, 'Should return an empty array for a non-matching node name.');
    equal($.isArray(item.ancestor('ul')), true, 'Should return an array.');
    equal(item.ancestor('ul')[0].id, 'ul', 'Should return id of ancestor: "ul".');
    equal(item.ancestor('ul')[0].className, 'ul', 'Should return class name of ancestor: "ul".');
@@ -239,7 +242,9 @@ test('[].siblings:', function() {
    equal(item.siblings().length, 2, 'Should return an array with length of 2.');
    equal(elem.siblings().length, 3, 'Should return an array with length of 3.');
    equal(div.siblings().length, 3, 'Should return an array with length of 3.');
+   equal(div.siblings('.whatever').length, 1, 'Should return an array with length of 1.');
    equal(div.siblings('ul').length, 1, 'Should return an array with length of 1.');
    equal(div.siblings('div').length, 1, 'Should return an array with length of 1.');
    equal(item.siblings('[disabled]').length, 1, 'Should return an array with length of 1.');
+   equal(item.siblings('#listitem').length, 1, 'Should return an array with length of 1.');
 });

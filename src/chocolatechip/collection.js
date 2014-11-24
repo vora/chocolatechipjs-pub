@@ -4,7 +4,7 @@
     each : function ( fn, ctx ) {
       if (!this.length) return [];
       if (typeof fn !== "function") { return; }
-      var i; 
+      var i;
       var l = this.length;
       ctx = arguments[1];
       for (i = 0; i < l; i++) {
@@ -16,7 +16,7 @@
       }
       return this;
     },
-    
+
     unique : function() {
       var ret = [];
       var sort = this.sort();
@@ -27,7 +27,7 @@
       });
       return ret.length ? ret : [];
     },
-    
+
     eq : function ( index ) {
       if (!this.length) return [];
       index = parseInt(index, 10);
@@ -47,7 +47,7 @@
         return [];
       }
     },
-    
+
     index : function ( element ) {
       if (!this.length) return [];
       var $this;
@@ -60,11 +60,11 @@
         } else if (element.nodeType === 1) {
           return this.indexOf(element);
         } else {
-          return this.indexOf(element);  
+          return this.indexOf(element);
         }
       }
     },
-    
+
     is : function ( arg ) {
       if (!this.length || !arg) return [];
       if (!this.length) return [];
@@ -91,7 +91,7 @@
         } else {
           return [];
         }
-      }; 
+      };
       this.each(function(item) {
         if (__is(item, arg)) {
           items.push(item);
@@ -103,7 +103,7 @@
         return [];
       }
     },
-    
+
     isnt : function ( arg ) {
     if (!this.length) return [];
       var items = [];
@@ -129,7 +129,7 @@
         } else {
           return [];
         }
-      }; 
+      };
       this.each(function(item) {
         if (__isnt(item, arg)) {
           items.push(item);
@@ -141,7 +141,7 @@
         return [];
       }
     },
-    
+
     has : function ( arg ) {
       if (!this.length) return [];
       var items = [];
@@ -169,7 +169,7 @@
         return [];
       }
     },
-    
+
     hasnt : function ( arg ) {
       if (!this.length) return [];
       var items = [];
@@ -189,8 +189,8 @@
       } else {
         return [];
       }
-    }, 
-    
+    },
+
     find : function ( selector, context ) {
       var ret = [];
       if (!this.length) return ret;
@@ -209,7 +209,7 @@
       }
       return ret;
     },
-    
+
     css : function ( property, value ) {
       if (!this.length) return [];
       var ret = [];
@@ -236,17 +236,17 @@
       }
       return ret.length ? ret : [];
     },
-    
+
     width : function ( ) {
       if (!this.length) return;
       return this.eq(0)[0].clientWidth;
     },
-    
+
     height : function ( ) {
       if (!this.length) return;
       return this.eq(0)[0].clientHeight;
     },
-    
+
     // Gets the absolute coordinates of the first element in a collection.
     // var offset = $('li').eq(0).offset();
     // offset.top, offset.right, offset.bottom, offset.left
@@ -261,7 +261,7 @@
         right: Math.round(offset.right)
        };
     },
-    
+
     prependTo : function ( selector ) {
       if (!this.length) return [];
       this.reverse();
@@ -270,7 +270,7 @@
       });
       return this;
     },
-    
+
     appendTo : function ( selector ) {
       if (!this.length) return [];
       this.each(function(item) {
@@ -278,7 +278,7 @@
       });
       return this;
     },
-    
+
     before: function ( content ) {
       if (!this.length) return [];
       var __before = function ( node, content ) {
@@ -287,7 +287,7 @@
         }
         if (content && content.constructor === Array) {
           var len = content.length;
-          var i = 0; 
+          var i = 0;
           while (i < len) {
             node.insertAdjacentElement('beforeBegin', content[i]);
             i++;
@@ -296,14 +296,14 @@
           node.insertAdjacentElement('beforeBegin',content);
         }
         return node;
-      };      
-      
+      };
+
       this.each(function(node) {
         __before(node, content);
       });
       return this;
     },
-    
+
     after : function ( args ) {
       if (!this.length) return [];
       var __after = function ( node, content ) {
@@ -325,18 +325,18 @@
           parent.appendChild(content);
         }
         return this;
-      };    
-    
+      };
+
       this.each(function(node) {
         __after(node, args);
       });
       return this;
     },
-    
+
     text : function ( string ) {
       if (!this.length) return [];
       var ret = '';
-      
+
       var __text = function ( node, value ) {
         if (!!value || value === 0) {
           node.innerText = value;
@@ -345,7 +345,7 @@
           return node.innerText;
         }
       };
-            
+
       this.each(function(node) {
         if (string) {
           __text(node, string);
@@ -358,7 +358,7 @@
       }
       return this;
     },
-    
+
     insert : function ( content, position ) {
       if (!this.length) return [];
       var __insert = function (node, content, position) {
@@ -423,7 +423,7 @@
       }
       return this;
     },
-    
+
     html : function ( content ) {
       if (!this.length) return [];
       var ret = [];
@@ -443,19 +443,19 @@
       });
       return ret.length ? ret : [];
     },
-    
+
     prepend : function ( content ) {
       if (!this.length) return [];
       this.insert(content,'first');
       return this;
     },
-    
+
     append : function ( content ) {
       if (!this.length) return [];
       this.insert(content, 'last');
       return this;
     },
-    
+
     attr : function ( property, value ) {
       if (!this.length) return [];
       var ret = [];
@@ -480,12 +480,12 @@
         return ret;
       }
     },
-    
+
     prop : function( property, value ) {
       if (!this.length) return [];
       return this.attr(property, value);
     },
-    
+
     hasAttr : function ( property ) {
       if (!this.length) return [];
       var ret = [];
@@ -496,7 +496,7 @@
       });
       return returnResult(ret);
     },
-    
+
     removeAttr : function ( attribute ) {
       if (!this.length) return [];
       var ret = [];
@@ -508,7 +508,7 @@
       });
       return returnResult(ret);
     },
-    
+
     hasClass : function ( className ) {
       if (!this.length) return [];
       var ret = [];
@@ -521,7 +521,7 @@
           tokens.forEach(function(name) {
             if (node && node.classList && node.classList.contains(name)) {
               ret.push(node);
-            }        
+            }
           });
           ret = ret.unique();
         } else if (node && node.classList && node.classList.contains(className)) {
@@ -530,7 +530,7 @@
       });
       return returnResult(ret);
     },
-    
+
     addClass : function ( className ) {
       if (!this.length) return [];
       if (typeof className !== "string") return;
@@ -549,7 +549,7 @@
       });
       return returnResult(ret);
     },
-    
+
     removeClass : function ( className ) {
       if (!this.length) return [];
       var ret = [];
@@ -581,7 +581,7 @@
       });
       return returnResult(ret);
     },
-    
+
     dataset : function ( key, value ) {
       if (!this.length) return [];
       var ret = [];
@@ -595,7 +595,7 @@
       }
       return returnResult(ret);
     },
-    
+
     val : function ( value ) {
       if (!this.length) return [];
       if (typeof value === 'string') {
@@ -609,7 +609,7 @@
         }
       }
     },
-    
+
     disable : function ( ) {
       if (!this.length) return [];
       var ret = [];
@@ -620,7 +620,7 @@
       });
       return returnResult(ret);
     },
-    
+
     enable : function ( ) {
       if (!this.length) return [];
       var ret = [];
@@ -631,7 +631,7 @@
       });
       return returnResult(ret);
     },
-    
+
     hide : function ( speed, callback ) {
       if (!this.length) return [];
       var cbk = callback || $.noop;
@@ -650,7 +650,7 @@
         storedDimensions.height = $(ctx).css('height');
         storedDimensions.opacity = $(ctx).css('opacity');
         storedDimensions.display = $(ctx).css('display');
-        $(ctx).data('ui-dimensions', storedDimensions); 
+        $(ctx).data('ui-dimensions', storedDimensions);
         if (typeof speed === 'string') {
           if (speed === 'slow') {
             $(ctx).css({transition: 'all 1s ease-out'});
@@ -691,7 +691,7 @@
       });
       return returnResult(ret);
     },
-    
+
     show : function ( speed, callback ) {
       if (!this.length) return [];
       var cbk = callback || $.noop;
@@ -748,7 +748,7 @@
         }
       });
     },
-    
+
     prev : function ( ) {
       if (!this.length) return [];
       var ret = [];
@@ -759,7 +759,7 @@
       });
       return ret;
     },
-    
+
     next : function ( ) {
       if (!this.length) return [];
       var ret = [];
@@ -770,7 +770,7 @@
       });
       return ret;
     },
-     
+
     first : function ( ) {
       if (!this.length) return [];
       var ret = [];
@@ -781,7 +781,7 @@
       });
       return ret;
     },
-     
+
     last : function ( ) {
       if (!this.length) return [];
       var ret = [];
@@ -792,7 +792,7 @@
       });
       return ret;
     },
-    
+
     children : function ( selector ) {
       if (!this.length) return [];
       var ret = [];
@@ -813,7 +813,7 @@
       }
       return ret;
     },
-    
+
     parent: function() {
       if (!this.length) return [];
       var ret = [];
@@ -823,7 +823,7 @@
       ret = ret.unique();
       return returnResult(ret);
     },
-    
+
     ancestor : function( selector ) {
       if (!this.length) return [];
       var ret = [];
@@ -833,8 +833,9 @@
       var el = this[0];
       var position = null;
       var newSelector = null;
+      var possibleAncestor = null;
       var p = el.parentNode;
-      if (!p) {
+      if (!p || p === document) {
         return [];
       }
       if (typeof selector === 'string') {
@@ -850,39 +851,39 @@
                p = p.parentNode;
              }
            }
-         } 
+         }
          ret.push(p);
       } else if (typeof selector === 'string' && selector.substr(0,1) === '.' ) {
         newSelector = selector.split('.')[1];
-        if (p.nodeName === 'BODY') {
-          ret.push(p);
-        }
         if (p.classList.contains(newSelector)) {
           ret.push(p);
         } else {
-          ret.push($(p).ancestor(selector)[0]);
+          possibleAncestor = $(p).ancestor(selector)[0];
+          if(possibleAncestor) { ret.push(possibleAncestor); }
         }
       } else if (typeof selector === 'string' && selector.substr(0,1) === '#' ) {
         newSelector = selector.split('#')[1];
         if (p.getAttribute('id') === newSelector) {
           ret.push(p);
         } else {
-          ret.push($(p).ancestor(selector)[0]);
+          possibleAncestor = $(p).ancestor(selector)[0];
+          if(possibleAncestor) { ret.push(possibleAncestor); }
         }
-      } else { 
+      } else {
         if (p.tagName && (p.tagName.toLowerCase() === selector)) {
           ret.push(p);
         } else {
-          ret.push($(p).ancestor(selector)[0]);
-        } 
+          possibleAncestor = $(p).ancestor(selector)[0];
+          if(possibleAncestor) { ret.push(possibleAncestor); }
+        }
       }
       return ret;
     },
-    
+
     closest : function( selector ) {
       return this.ancestor(selector);
     },
-    
+
     siblings : function( selector ) {
       if (!this.length) return [];
       var _siblings;
@@ -897,7 +898,7 @@
         _siblings.splice(_siblings.indexOf(ctx),1);
         if (selector) {
           _siblings.each(function(node) {
-            if (node.nodeName === selector.toUpperCase()) {
+            if ([node].is(selector)[0]) {
               ret.push(node);
             }
           });
@@ -909,7 +910,7 @@
       });
       return ret.length ? ret.unique() : this;
     },
-    
+
     off : function( event, selector, callback, capturePhase ) {
       if (!this.length) return [];
       var ret = [];
@@ -924,7 +925,7 @@
       });
       return ret.length ? ret : this;
     },
-           
+
     clone : function ( value ) {
       if (!this.length) return [];
       var ret = [];
@@ -937,7 +938,7 @@
       });
       return ret.length ? ret[0] : this;
     },
-        
+
     wrap : function ( string ) {
       if (!this.length) return [];
       this.each(function(ctx) {
@@ -950,7 +951,7 @@
       });
       return this;
     },
-    
+
     unwrap : function ( ) {
       if (!this.length) return [];
       var parentNode = null;
@@ -966,7 +967,7 @@
       });
       return this;
     },
-    
+
     remove : function ( ) {
       if (!this.length) return [];
       this.each(function(ctx) {
@@ -975,7 +976,7 @@
         ctx.parentNode.removeChild(ctx);
       });
     },
-    
+
     empty : function ( ) {
       if (!this.length) return [];
       var ret = [];
