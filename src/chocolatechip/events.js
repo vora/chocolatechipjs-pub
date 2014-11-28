@@ -112,6 +112,21 @@
         }
       });
       return ret.length ? ret : this;
-    }
+    },
+    
+    off : function( event, selector, callback, capturePhase ) {
+      if (!this.length) return [];
+      var ret = [];
+      this.each(function(ctx) {
+        if (typeof selector === 'function' || !selector) {
+          $(ctx).unbind(event, selector, callback);
+          ret.push(ctx);
+        } else {
+          $(ctx).undelegate(selector, event, callback, capturePhase);
+          ret.push(ctx);
+        }
+      });
+      return ret.length ? ret : this;
+    },
   });
 })();

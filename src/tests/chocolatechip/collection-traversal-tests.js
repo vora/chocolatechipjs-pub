@@ -221,6 +221,7 @@ test('[].ancestor:', function() {
    equal(item.ancestor('ul')[0].className, 'ul', 'Should return class name of ancestor: "ul".');
    equal(item.ancestor('ul')[0]['title'], 'list', 'Should return title of ancestor: "list".');
    equal($.isArray(item.ancestor('div')), true, 'Should return an array.');
+   equal(item.ancestor('div').length, 1, 'Should return an array with length of 1.');
    equal(item.ancestor('div')[0].id, 'qunit-fixture', 'Should return id of ancestor: "qunit-fixture".');
    equal(item.ancestor('div')[0].nodeName, 'DIV', 'Should return ancestor: "DIV".');
    equal(item.ancestor(1)[0].nodeName, 'UL', 'Should return ancestor of type "UL".');

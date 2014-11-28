@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Form</title>
+    <link rel="stylesheet" href="chui-ios-3.8.0.css">
+    <style>
+    	input {
+        -webkit-appearance: auto;
+      }
+      input[type=text] {
+        border: solid 1px #ccc;
+      }
+    </style>
+   <script src="../dist/chocolatechip-3.8.0.js"></script>
+   <script>
+      function submitForm() {
+         var formData = $.form2JSON('#userForm');
+         var data = JSON.stringify(formData);
+         window.location = "json_form_target.html?" + data;
+      }
+      $(function() {
+		    $("button").on("click", function() {
+          var vals = 0;
+          $("#userForm").find('input').forEach(function(el) {
+            if (el.value) vals++;
+          });
+          if (vals > 8) $("#userForm")[0].submit();
+          else alert('Please enter a name.')
+		    });   
+      });
+   </script>
+</head>
+<body>
+  <nav id="global-nav"></nav>
+	<nav class='current'>
+		<h1>$.form2JSON</h1>
+    <button class="done" align-flush="right">Submit</button>
+	</nav>
+	<article id='main' class='current'>
+		<section>
+      <h2 class='normal-case wrap'>Enter values in the form below and then tap "Submit" to see how $.form2JSON converts the from values into a JSON object. You'll be directed to another page were you can see the result. Examine the browser address bar to see the JSON object encoded. You can get back the JSON object by runing decodeURI("") with the encoded object in quotes.</h2>
+			<form id="userForm" action="javascript:submitForm()">
+        <h2>Personal Info</h2>
+				<ul class='list'>
+					 <li>
+						  <h3>First name:</h3>
+						  <input type="text" name="user.name.first">
+					 </li>
+					 <li>
+						  <h3>Last name:</h3>
+							<input type="text" name="user.name.last">
+					 </li>
+					 <li>
+						  <h3>Phone:</h3>
+						  <input type="text" name="user.phone">
+					 </li>
+					 <li>
+						  <h3>Email:</h3>
+						  <input type="text" name="user.email">
+					 </li>
+				</ul>
+        <h2>Your favorite thing to eat:</h2>
+					<ul class='list'>
+					<li>
+						<h3>Salad:</h3>
+						<input type="checkbox" name="user.favoriteFood[]" value="salad">
+					</li>
+					<li>
+						<h3>Pizza:</h3>
+						<input type="checkbox" name="user.favoriteFood[]" value="pizza">
+					</li>
+					<li>
+						<h3>Chicken:</h3>
+						<input type="checkbox" name="user.favoriteFood[]" value="chicken">
+					</li>
+         </ul>
+          
+					<h2>Feedback</h2>
+          <ul class='list'>
+					<li>
+					  <h3>Message:</h3>
+					  <input type="text" name="user.message">
+					</li>
+				</ul>
+        <h2>Choose one of the following:</h2>
+				<ul class='list'>	
+					<li>
+						<h3>Web developer</h3> 
+						<input type="radio" name="user.job" value="Web developer">
+					</li>
+					<li>
+						<h3>Rocket scientist</h3> 
+						<input type="radio" name="user.job" value="Rocket scientist">
+					</li>
+					<li>
+						<h3>Cook</h3> 
+						<input type="radio" name="user.job" value="Cook">
+					</li>
+					<li>
+						<h3>Banker</h3> 
+						<input type="radio" name="user.job" value="Banker">
+					</li>
+					<li>
+						<h3>Janitor</h3> 
+						<input type="radio" name="user.job" value="Janitor">
+					</li>
+				</ul>
+			</form>
+		</section>
+	</article>
+</body>
+</html>

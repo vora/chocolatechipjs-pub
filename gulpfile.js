@@ -135,7 +135,10 @@ gulp.task('tests', function() {
 
   gulp.src('src/tests/chocolatechip/*.html')
     .pipe(header(testHeader, {pkg: pkg}))
-    .pipe(gulp.dest('tests/chocolatechip'));
+    .pipe(gulp.dest('tests/chocolatechip'))
+
+  gulp.src('src/forms/*')
+    .pipe(gulp.dest('forms/'));
 });
 
 /* 
