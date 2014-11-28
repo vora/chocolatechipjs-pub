@@ -1218,29 +1218,12 @@ Version: 3.8.1
            }
          } 
          ret.push(p);
-      } else if (typeof selector === 'string' && selector.substr(0,1) === '.' ) {
-        newSelector = selector.split('.')[1];
-        if (p.nodeName === 'BODY') {
-          ret.push(p);
-        }
-        if (p.classList.contains(newSelector)) {
+      } else if (typeof selector === 'string') {
+        if ($(p).is(selector).length) {
           ret.push(p);
         } else {
           ret.push($(p).ancestor(selector)[0]);
         }
-      } else if (typeof selector === 'string' && selector.substr(0,1) === '#' ) {
-        newSelector = selector.split('#')[1];
-        if (p.getAttribute('id') === newSelector) {
-          ret.push(p);
-        } else {
-          ret.push($(p).ancestor(selector)[0]);
-        }
-      } else { 
-        if (p.tagName && (p.tagName.toLowerCase() === selector)) {
-          ret.push(p);
-        } else {
-          ret.push($(p).ancestor(selector)[0]);
-        } 
       }
       return ret;
     },
@@ -1263,7 +1246,7 @@ Version: 3.8.1
         _siblings.splice(_siblings.indexOf(ctx),1);
         if (selector) {
           _siblings.each(function(node) {
-            if (node.nodeName === selector.toUpperCase()) {
+            if ([node].is(selector)[0]) {
               ret.push(node);
             }
           });
