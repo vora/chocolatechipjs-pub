@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<link rel="apple-touch-startup-image" href="startup.png">
+	<link rel="apple-touch-icon" href="chocolatechip-icon.png"/>
+	<link rel="shortcut icon" href="favicon.ico">
+	<title>ChocolateChip Mobile</title>
+	<link rel="stylesheet" href="chui-ios-3.8.0.css">
+   <script src="../dist/chocolatechip-3.8.0.js"></script>
+	<script>
+		/* Local JavaScript Here */
+		$(function() {
+		  var user_data = window.location.href.slice(window.location.href.indexOf('?') + 1);
+			user_data = unescape(user_data);
+			window.user = JSON.parse(user_data).user;
+				var firstName;
+				var lastName;
+				if (!!user.name) {
+					firstName = user.name.first || null;
+					lastName = user.name.last || null;
+				} 
+				
+				var email = user.email || "";
+				var phone = user.phone || "";
+				var message = user.message || "";
+				var foods = user.favoriteFood || "";
+				var job = user.job || "";
+			
+				var userTmpl = "";
+				if (firstName || lastName) {
+					userTmpl += "<li><h3>Name: ";
+				}
+			    if (firstName) {
+			        userTmpl += firstName;
+			    }
+			    if (lastName) {
+			        userTmpl += " " + lastName;
+			    }
+			    userTmpl += "</h3></li>";
+				if (email) {
+				    userTmpl += "<li><h4>Email: " + user.email  + "</h4></li>";
+				}
+				if (phone) {
+				    userTmpl += "<li><p>Phone: " + user.phone + "</p></li>";
+				}
+				if (message) {
+				    userTmpl += "<li><p>Message: " + message + "</p></li>";
+				}
+				if (foods.length) {
+				    userTmpl += "<li><p>Favorite foods:<ol>";
+				    user.favoriteFood.forEach(function(food) {
+				        userTmpl += "<li>" + food + "</li>";
+				    });
+				    userTmpl += "</ol></p></li>";
+				}
+				if (job) {
+				    userTmpl += "<li><p>Job: " + job + "</p></li>";
+				}
+				
+			// Insert the results of the parsed template into the tableview."
+			$("#main ul:first-of-type").html(userTmpl);
+			var regx = /}/g;
+			$('#jsonObj').html(user_data.toString().replace(/{/g, '{\n').replace(/,/g, ',\n').replace(/}}/g, '}\n}').replace('"job', '\t"job').replace('"message', '\t"message').replace('"favoriteFood', '\t"favoriteFood').replace('"email', '\t"email').replace('"phone', '\t"phone').replace('"last', '\t\t"last').replace('"first', '\t\t"first').replace('"name', '\t"name'));
+		});
+	</script>
+</head>
+<body>
+		<nav id="global-nav"></nav>
+		<nav class='current'>
+			<h1>JSON from URL</h1>
+		</nav>
+		<article id="main" class="current">
+			<section>
+				<ul class='list'>
+					<li>
+						<h3>This is an example of a JSON object sent through the url.</h3>
+					</li>
+				</ul>
+				<h2>The JSON Object</h2>
+				<ul class="list">
+					<li>
+						<pre id='jsonObj'></pre>
+					</li>
+				</ul>
+			</section>
+		</article>
+</body>
+</html>
