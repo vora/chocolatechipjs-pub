@@ -32,6 +32,22 @@ Enter your password when it requests. After you should see a number of Nodejs mo
 
 Now that you have the node modules install, you can just type `gulp` in the terminal and hit return/enter. 
 
+```
+gulp
+```
+
+###Support for ECMAScript 6 Promises
+
+By default ChocolateChipJS provides a deferred object that is feature compatible with jQuery's version and it's Ajax methods return deferred objects as well. If you want, you can build ChocolateChipJS with support for the ECMAScript 6 Promises API. This will work both in browsers that support the new Promises API, and by a pollyfil, with older browsers that do not. Also, when building ChocolateChipJS with Promises, its Ajax methods are also refactored to use the new API.
+
+To build ChocolateChipJS with support for ECMAScript Promises, pass it the flag, `promiseSupport`:
+
+```
+gulp --promiseSupport true
+```
+
+This will replace the jQuery deferred object and Ajax methods with the pollyfil, Ajax methods and unit tests for the ECMAScript Pomises API.
+
 
 ###Note
 
