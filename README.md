@@ -3,6 +3,9 @@ ChocolateChipJS
 
 ##A JavaScript Library for Mobile Web App Development
 
+#Attention!
+##We have consolidated ChocolateChip-UI and all other projects related to it under an new Github repository [chocolatechipui](https://github.com/chocolatechipui). All future work will be done under that account. Please update your forks or clones to point to that repository.
+
 The purpose of ChocolateChipJS is to use with ChocolateChip-UI. Of course, since it is so small and fast, you could use it as the basis for a simple mobile app, as you would with Zeptojs, etc. Please visit [ChocolateChip-UI's Website](http://chocolatechip-ui.com) for documentation on ChocolateChipJS. You can optionally build the ChocolateChip-UI framework with support for ChocolateChipJS. Please read the build instructions for [ChocolateChip-UI to learn more](http://chocolatechip-ui.com/documentation).
 
 ##Building 
